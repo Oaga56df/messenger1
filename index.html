@@ -1,111 +1,90 @@
 <!DOCTYPE html>
-<html lang="zh-MY">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Connecting to WhatsApp...</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>正在连接 WhatsApp...</title>
     <style>
         body {
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background-color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
-            color: #333;
+            margin: 0;
+            background-color: #f0f2f5;
         }
-        /* 加载旋转圈 */
-        .loader {
+        .container {
+            text-align: center;
+            padding: 30px 20px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            max-width: 320px;
+            width: 90%;
+        }
+        .loading-icon {
+            width: 50px;
+            height: 50px;
             border: 4px solid #f3f3f3;
             border-top: 4px solid #25D366;
             border-radius: 50%;
-            width: 50px;
-            height: 50px;
             animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
         }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
-        .status-text { margin-top: 20px; font-size: 18px; font-weight: 500; }
-        .sub-text { margin-top: 10px; font-size: 14px; color: #888; }
-
-        /* iOS 专用引导遮罩 */
-        #ios-guide {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            z-index: 9999;
-            flex-direction: column;
-            align-items: center;
-            padding-top: 40px;
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
-        .arrow-hint {
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            font-size: 40px;
-            color: #25D366;
+        .text-main {
+            font-size: 18px;
+            color: #1c1e21;
+            font-weight: 600;
+            margin-bottom: 8px;
         }
-        .guide-box {
-            width: 85%;
-            border: 2px dashed #25D366;
-            padding: 20px;
-            border-radius: 15px;
-            background: #f0fff4;
+        .text-sub {
+            font-size: 14px;
+            color: #606770;
+            margin-bottom: 25px;
+        }
+        .btn {
+            display: block;
+            background-color: #25D366;
+            color: white;
+            padding: 14px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        .btn:active {
+            background-color: #128C7E;
         }
     </style>
 </head>
 <body>
 
-    <div class="loader"></div>
-    <div class="status-text">正在为您匹配交友对象...</div>
-    <div class="sub-text">请稍等，正在跳转至 WhatsApp</div>
+<div class="container">
+    <div class="loading-icon"></div>
+    <div class="text-main">正在为您跳转</div>
+    <div class="text-sub">如未自动跳转，请点击下方按钮</div>
+    
+    <a href="https://wa.me/60102148938?text=%E4%BD%A0%E5%A5%BD%EF%BC%8C%E5%BE%88%E9%AB%98%E5%85%B4%E8%AE%A4%E8%AF%86%E6%82%A8%E3%80%82" class="btn" id="wa-link">
+        通过 WhatsApp 对话
+    </a>
+</div>
 
-    <div id="ios-guide">
-        <div class="arrow-hint">↗️</div>
-        <div class="guide-box">
-            <h2 style="color: #25D366; margin-top: 0;">温馨提示</h2>
-            <p>请点击右上角三个点 <strong>“···”</strong></p>
-            <p>选择 <strong>“在浏览器中打开”</strong></p>
-            <p style="font-size: 13px; color: #666;">（Open in Safari / Browser）</p>
-            <hr style="border: 0; border-top: 1px solid #ddd; margin: 15px 0;">
-            <p style="font-size: 14px;">这样可以更稳定地联系到对方哦！</p>
-        </div>
-    </div>
+<script>
+    window.onload = function() {
+        const waUrl = document.getElementById('wa-link').href;
+        
+        // 尝试自动执行跳转
+        setTimeout(function() {
+            window.location.href = waUrl;
+        }, 500); // 延迟0.5秒给页面渲染时间，提升成功率
+    };
+</script>
 
-    <script>
-        (function() {
-            // 配置你的链接
-            const waUrl = "https://wa.me/60102148938?text=%E4%BD%A0%E5%A5%BD%EF%BC%8C%E5%BE%88%E9%AB%98%E5%85%B4%E8%AE%A4%E8%AF%86%E6%82%A8%E3%80%82";
-            const ua = navigator.userAgent || navigator.vendor || window.opera;
-
-            // 环境判断
-            const isFacebook = (ua.indexOf("FBAN") > -1) || (ua.indexOf("FBAV") > -1) || (ua.indexOf("Messenger") > -1);
-            const isAndroid = /Android/i.test(ua);
-            const isIos = /iPhone|iPad|iPod/i.test(ua);
-
-            if (isFacebook) {
-                if (isAndroid) {
-                    // Android 强制调起外部浏览器
-                    const intentUrl = "intent://" + waUrl.replace(/^https?:\/\//, "") + "#Intent;scheme=https;package=com.android.chrome;end";
-                    window.location.href = intentUrl;
-                    
-                    // 备用方案：如果500ms没跳走，直接跳转
-                    setTimeout(() => { window.location.href = waUrl; }, 500);
-                } else if (isIos) {
-                    // iOS 显示引导遮罩
-                    document.getElementById('ios-guide').style.display = 'flex';
-                    // 同时尝试直接触发唤醒
-                    window.location.href = waUrl;
-                }
-            } else {
-                // 非FB环境（已经是外部浏览器），直接跳转
-                window.location.href = waUrl;
-            }
-        })();
-    </script>
 </body>
 </html>

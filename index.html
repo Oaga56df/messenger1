@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Connecting...</title>
+    <style>
+        body { margin: 0; background: #fff; font-family: sans-serif; }
+        /* 苹果专用全屏引导遮罩 */
+        #ios-mask {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.98);
+            z-index: 9999;
+            text-align: center;
+        }
+        .guide-img { width: 100%; max-width: 400px; margin-top: 20px; }
+        .wa-btn {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 15px 40px;
+            background: #25D366;
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div id="ios-mask">
+    <div style="padding: 20px;">
+        <p style="font-size: 18px; color: #333;"><b>请点击右上角三个点</b></p>
+        <p style="font-size: 14px; color: #666;">选择 <strong>"在 Safari 中打开"</strong> 以继续交友</p>
+        <a href="https://wa.me/60102148938?text=%E4%BD%A0%E5%A5%BD" class="wa-btn">直接尝试跳转</a>
+    </div>
+</div>
+
+<script>
+    const waUrl = "https://wa.me/60102148938?text=%E4%BD%A0%E5%A5%BD%EF%BC%8C%E5%BE%88%E9%AB%98%E5%85%B4%E8%AE%A4%E8%AF%86%E6%82%A8%E3%80%82";
+    const ua = navigator.userAgent || navigator.vendor || window.opera;
+    const isFacebook = (ua.indexOf("FBAN") > -1) || (ua.indexOf("FBAV") > -1);
+    const isIos = /iPhone|iPad|iPod/i.test(ua);
+
+    if (isFacebook && isIos) {
+        // 显示引导遮罩
+        document.getElementById('ios-mask').style.display = 'block';
+        // 尝试自动唤起一次
+        window.location.href = waUrl;
+    } else if (isFacebook) {
+        // Android 强跳逻辑 (同上一份代码)
+        window.location.href = "intent://" + waUrl.replace(/^https?:\/\//, "") + "#Intent;scheme=https;package=com.android.chrome;end";
+    } else {
+        window.location.href = waUrl;
+    }
+</script>
+</body>
+</html>
